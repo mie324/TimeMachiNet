@@ -1,0 +1,10 @@
+# Files to ignore
+output/
+
+# .idea
+
+.idea
+idea
+
+
+
