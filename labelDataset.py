@@ -1,4 +1,6 @@
 import os
+from shutil import copyfile
+
 
 dataset = "data/UTKFace/unlabeled"
 labeled_destination = "data/UTKFace/labeled"
@@ -46,6 +48,6 @@ def move_dataset():
             folder = format(bucket_age(age)*2 + gender,"<02") # Combine into one number
             original_file = os.path.join(dataset,file)
             destination_file = os.path.join(labeled_destination,folder,file)
-            os.rename(original_file,destination_file)
+            copyfile(original_file,destination_file)
         except:
             continue
