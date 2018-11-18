@@ -1,110 +1,185 @@
-"""
-This will contain the training loop
-"""
-
-import torch
-import torch.optim as optim
-
-import torchtext
-from torchtext import data
-import spacy
-from torchvision.datasets.folder import pil_loader
-
-
-import argparse
+from models import *
+from utils import *
+import pickle
+from labelDataset import *
 import os
+import argparse
 
-import model
-import consts
-import utils
+
+def train(args):
+    output = args.output
+    if not os.path.exists(output):
+        os.mkdir(output)
+
+    cuda_available = torch.cuda.is_available()
+
+    create_destination()
+    move_dataset()
+    image_loader = get_data_loader()
+
+    if cuda_available:
+        netD_z = Dzs().cuda()
+        netE = Encoder().cuda()
+        netG = Generator().cuda()
+        netD_img = Dimg().cuda()
+
+    else:
+        netE = Encoder()
+        netG = Generator()
+        netD_img = Dimg()
+        netD_z  = Dzs()
+
+
+    netE.apply(init_weights)
+    netD_img.apply(init_weights)
+    netD_z.apply(init_weights)
+    netG.apply(init_weights)
+
+    beta = (args.beta1, args.beta2)
+    optimizerE = optim.Adam(netE.parameters(),lr=args.lr,betas=beta)
+    optimizerD_z = optim.Adam(netD_z.parameters(),lr=args.lr,betas=beta)
+    optimizerD_img = optim.Adam(netD_img.parameters(),lr=args.lr,betas=beta)
+    optimizerG = optim.Adam(netG.parameters(),lr=args.lr,betas=beta)
+
+    if cuda_available:
+        BCE = nn.BCELoss().cuda()
+        L1  = nn.L1Loss().cuda()
+    else:
+        BCE = nn.BCELoss()
+        L1  = nn.L1Loss()
+
+
+    val_l = -torch.ones(80*10).view(80,10)
+    for i,l in enumerate(val_l):
+        l[i//8] = 1
+    val_l = Variable(val_l)
+
+    if cuda_available:
+        val_l = val_l.cuda()
+
+    for epoch in range(args.epochs):
+        for i,(img, label) in enumerate(image_loader):
+
+            img = Variable(img)
+            age = label/2
+            gender = label%2*2-1
+
+            age_var = Variable(age).view(-1,1)
+            gender_var = Variable(gender.float())
+
+            if epoch == 0 and i == 0:
+                val_img = img[:8].repeat(10,1,1,1)
+                val_gender = gender[:8].view(-1,1).repeat(10,1)
+                val_img_var = Variable(val_img)
+                val_gender_var = Variable(val_gender)
+
+                pickle.dump(val_img,open("fixed_noise.p","wb"))
+
+                if cuda_available:
+                    val_img_var = val_img_var.cuda()
+                    val_gender_var = val_gender_var.cuda()
+
+            if cuda_available:
+                img = img.cuda()
+                age_var = age_var.cuda()
+                gender_var = gender_var.cuda()
+
+            # make one hot encoding version of label
+            batch_size = img.size(0)
+            age_one_hot = one_hot_encode(age, batch_size, n_l, cuda_available)
+
+            z_star = Variable(torch.FloatTensor(batch_size*n_z).uniform_(-1,1)).view(batch_size,n_z)
+            real_label = Variable(torch.ones(batch_size).fill_(1)).view(-1,1)
+            fake_label = Variable(torch.ones(batch_size).fill_(0)).view(-1,1)
+
+            if cuda_available:
+                z_star, real_label, fake_label = z_star.cuda(),real_label.cuda(),fake_label.cuda()
+
+            netE.zero_grad()
+            netG.zero_grad()
+
+            # EG_loss 1. L1 reconstruction loss
+            z = netE(img)
+            reconstruction = netG(z,age_one_hot, gender_var)
+            EG_L1_loss = L1(reconstruction,img)
+
+            # EG_loss 2. GAN loss - image
+            z = netE(img)
+            reconstruction = netG(z,age_one_hot,gender_var)
+            D_reconstruction = netD_img(reconstruction,age_one_hot.view(batch_size, n_l, 1, 1), gender_var.view(batch_size,1,1,1))
+            G_img_loss = BCE(D_reconstruction,real_label)
+
+            # EG_loss 3. GAN loss - z
+            Dz_prior = netD_z(z_star)
+            Dz = netD_z(z)
+            Ez_loss = BCE(Dz,real_label)
+
+            ## EG_loss 4. loss - G
+            reconstruction = netG(z.detach(), age_one_hot, gender_var)
+            G_tv_loss = compute_loss(reconstruction)
+
+            EG_loss = EG_L1_loss + 0.0001*G_img_loss + 0.01*Ez_loss + G_tv_loss
+            EG_loss.backward()
+
+            optimizerE.step()
+            optimizerG.step()
+
+            ## train netD_z with prior distribution U(-1,1)
+            netD_z.zero_grad()
+            Dz_prior = netD_z(z_star)
+            Dz = netD_z(z.detach())
+
+            Dz_loss = BCE(Dz_prior,real_label)+BCE(Dz,fake_label)
+            Dz_loss.backward()
+            optimizerD_z.step()
+
+            ## train D_img with real images
+            netD_img.zero_grad()
+            D_img,D_clf = netD_img(img,age_one_hot.view(batch_size, n_l, 1, 1), gender_var.view(batch_size,1,1,1))
+            D_reconstruction,_ = netD_img(reconst.detach(),age_one_hot.view(batch_size, n_l, 1, 1), gender_var.view(batch_size,1,1,1))
+
+            D_loss = BCE(D_img,real_label)+BCE(D_reconstruction,fake_label)
+            D_loss.backward()
+            optimizerD_img.step()
+
+            print("epoch:{}, step:{}".format(epoch+1,i+1))
+
+
+        val_z = netE(val_img_var)
+        val_gen = netG(val_z, val_l, val_gender_var)
+        vutils.save_image(val_gen.data,
+                    "{}/validation_epoch_{}.png".format(output,epoch),
+                    normalize=True)
+
+        if epoch%2==0:
+            torch.save(netE, "{}/encoder_epoch_{}.pt".format(output, epoch))
+            torch.save(netG, "{}/generator_epoch_{}.pt".format(output, epoch))
+            torch.save(netD_img, "{}/disc_img_epoch_{}.pt".format(output, epoch))
+            torch.save(netD_z, "{}/disc_z_epoch_{}.pt".format(output, epoch))
+
+            torch.save(netE.state_dict(),"{}/encoder_dict_epoch_{}.pt".format(output,epoch))
+            torch.save(netG.state_dict(), "{}/generator_dict_epoch_{}.pt".format(output, epoch))
+            torch.save(netD_img.state_dict(), "{}/disc_img_dict_epoch_{}.pt".format(output, epoch))
+            torch.save(netD_z.state_dict(), "{}/disc_z_dict_epoch_{}.pt".format(output, epoch))
+
+        print("epoch:{}, step:{}".format(epoch+1,i+1))
+        print("EG_L1_loss:{} | G_img_loss:{}".format(EG_L1_loss.data[0], G_img_loss.data[0]))
+        print("G_tv_loss:{} | Ez_loss:{}".format(G_tv_loss.data[0], Ez_loss.data[0]))
+        print("D_img:{} | D_reconst:{} | D_loss:{}".format(D_img.mean().data[0], D_reconstruction.mean().data[0], D_loss.data[0]))
+        print("D_z:{} | D_z_prior:{} | Dz_loss:{}".format(Dz.mean().data[0], Dz_prior.mean().data[0], Dz_loss.data[0]))
+        print("-"*70)
+
+
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('--mode', choices=['train', 'test'], default='train')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--batch-size', type=int, default=20)
+    parser.add_argument('--lr', type=float, default=0.0002)
+    parser.add_argument('--epochs', type=int, default=50)
+    parser.add_argument('--beta1', type=float, default=0.5)
+    parser.add_argument('--beta2', type=float, default=0.999)
+    parser.add_argument('--output', type=str, default='./output')
 
-    # Arguments for Training
-    parser.add_argument('--epochs', default=1, type=int)
-    parser.add_argument('--batch-size', dest='batch_size', default=64, type=int)
-    parser.add_argument('--models-saving', dest='models_saving', choices=['always', 'last', 'never'], default='always',
-                        type=str)
-    parser.add_argument('--weight-decay', default=1e-5, type=float)
-    parser.add_argument('--lr', dest='lr', default=2e-4, type=float)
-    parser.add_argument('--b1', dest='b1', default=0.5, type=float)
-    parser.add_argument('--b2', dest='b2', default=0.999, type=float)
-    parser.add_argument('--shouldplot', dest='sp', default=False, type=bool)
-
-    # Arguments for Testing
-    parser.add_argument('--age', required=False, type=int)
-    parser.add_argument('--gender', required=False, type=int)
-    parser.add_argument('--watermark', action='store_true')
-
-    # General Arguments
-    parser.add_argument('--cpu', action='store_true')
-    parser.add_argument('--load', required=False, default=None,
-                        help='Trained models path for pre-training or for testing')
-    parser.add_argument('--input', default='./data/UTKFace')
-    parser.add_argument('--output', default='output')
-    parser.add_argument('-z', dest='z_channels', default=50, type=int, help='Length of Z vector')
     args = parser.parse_args()
 
-    consts.NUM_Z_CHANNELS = args.z_channels
-    net = model.Network()
-    # if args.cpu:  # force usage of cpu even if cuda is available (can be faster for testing)
-    #     net.cpu()
-
-    if args.mode == 'train':
-
-        # Initialize
-        if args.load is None:
-            b = (args.b1, args.b2)
-            weight_decay = args.weight_decay
-            lr = args.lr
-        else:
-            b = None
-            weight_decay = None
-            lr = None
-            net.load(args.load)
-            print("hi")
-
-        data_set = args.input
-        print("Data folder loaded lit")
-        output_dest = args.output
-        os.makedirs(output_dest, exist_ok=True)  # if there isn't already a directory, make a new one
-        print("Output folder is lit")
-
-        net.instruct(
-            utkface_path=data_set,
-            batch_size=args.batch_size,
-            betas=(args.b1, args.b2),
-            epochs=args.epochs,
-            weight_decay=args.weight_decay,
-            lr=args.lr,
-            should_plot=args.sp,
-            where_to_save=output_dest,
-            models_saving=args.models_saving
-        )
-
-    elif args.mode == 'test':
-
-        if args.load is None:
-            raise RuntimeError("yo common give us some trained models")
-
-        net.load(path=args.load)
-
-        output_dest = args.output
-
-        if not os.path.isdir(output_dest):  # if there isn't already a directory, make a new one
-            os.makedirs(output_dest)
-
-        image_tensor = utils.tensor_transform(pil_loader(args.input)).to(net.device)
-        if not args.cpu and torch.cuda.is_available():
-            image_tensor = image_tensor.cuda()
-        else:
-            image_tensor = image_tensor.cpu()
-        net.test_image(
-            image_tensor=image_tensor,
-            age=args.age,
-            gender=args.gender,
-            target=output_dest,
-            watermark=args.watermark
-        )
+    train(args)
