@@ -1,7 +1,7 @@
 import os
 
-dataset = "./UTKFace/unlabeled"
-labeled_destination = "./UTKFace/labeled"
+dataset = "data/UTKFace/unlabeled"
+labeled_destination = "data/UTKFace/labeled"
 
 def create_destination():
     if not os.path.exists(labeled_destination):
