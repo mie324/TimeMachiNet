@@ -7,6 +7,7 @@ from torch import nn
 from torch import optim
 from torch.autograd import Variable
 
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 labeled_dataset = "data/UTKFace/labeled"
