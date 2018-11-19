@@ -153,7 +153,7 @@ def train(args):
                     "{}/validation_epoch_{}.png".format(output,epoch),
                     normalize=True)
 
-        if epoch%2==0:
+        if (epoch%10==0 or epoch == 49):
             torch.save(netE, "{}/encoder_epoch_{}.pt".format(output, epoch))
             torch.save(netG, "{}/generator_epoch_{}.pt".format(output, epoch))
             torch.save(netD_img, "{}/disc_img_epoch_{}.pt".format(output, epoch))
@@ -161,8 +161,6 @@ def train(args):
 
             torch.save(netE.state_dict(),"{}/encoder_dict_epoch_{}.pt".format(output,epoch))
             torch.save(netG.state_dict(), "{}/generator_dict_epoch_{}.pt".format(output, epoch))
-            torch.save(netD_img.state_dict(), "{}/disc_img_dict_epoch_{}.pt".format(output, epoch))
-            torch.save(netD_z.state_dict(), "{}/disc_z_dict_epoch_{}.pt".format(output, epoch))
 
         print("epoch:{}, step:{}".format(epoch+1,i+1))
         print("EG_L1_loss:{} | G_img_loss:{}".format(EG_L1_loss.data[0], G_img_loss.data[0]))
