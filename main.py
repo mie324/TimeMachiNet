@@ -88,6 +88,7 @@ def train(args):
             batch_size = img.size(0)
             age_one_hot = one_hot_encode(age, batch_size, n_l, cuda_available)
 
+            # prior distribution z_star, real_label, fake_label
             z_star = Variable(torch.FloatTensor(batch_size*n_z).uniform_(-1,1)).view(batch_size,n_z)
             real_label = Variable(torch.ones(batch_size).fill_(1)).view(-1,1)
             fake_label = Variable(torch.ones(batch_size).fill_(0)).view(-1,1)
@@ -95,18 +96,19 @@ def train(args):
             if cuda_available:
                 z_star, real_label, fake_label = z_star.cuda(),real_label.cuda(),fake_label.cuda()
 
+            # train Encoder and Generator with reconstruction loss
             netE.zero_grad()
             netG.zero_grad()
 
             # EG_loss 1. L1 reconstruction loss
             z = netE(img)
-            reconstruction = netG(z,age_one_hot, gender_var)
-            EG_L1_loss = L1(reconstruction,img)
+            reconst = netG(z,age_one_hot, gender_var)
+            EG_L1_loss = L1(reconst,img)
 
             # EG_loss 2. GAN loss - image
             z = netE(img)
             reconstruction = netG(z,age_one_hot,gender_var)
-            D_reconstruction = netD_img(reconstruction,age_one_hot.view(batch_size, n_l, 1, 1), gender_var.view(batch_size,1,1,1))
+            D_reconstruction,_ = netD_img(reconstruction,age_one_hot.view(batch_size, n_l, 1, 1), gender_var.view(batch_size,1,1,1))
             G_img_loss = BCE(D_reconstruction,real_label)
 
             # EG_loss 3. GAN loss - z
