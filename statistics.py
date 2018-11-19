@@ -78,7 +78,7 @@ plt.show()
 
 race_label = ["White", "Black", "Asian", "Indian", "Other"]
 
-plt.pie(races, labels=race_label, autopct='%.1f%%')
+plt.pie(races, labels=race_label, autopct='%.1f%%',startangle=90)
 plt.title("Race distribution of UTKFace dataset")
 plt.show()
 
