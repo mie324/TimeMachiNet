@@ -147,20 +147,14 @@ def train(args):
             print("epoch:{}, step:{}".format(epoch+1,i+1))
 
 
-        val_z = netE(val_img_var)
-        val_gen = netG(val_z, val_l, val_gender_var)
-        vutils.save_image(val_gen.data,
-                    "{}/validation_epoch_{}.png".format(output,epoch),
-                    normalize=True)
-
-        if (epoch%10==0 or epoch == 49):
+        if (epoch%10==0 or epoch == 149):
             torch.save(netE, "{}/encoder_epoch_{}.pt".format(output, epoch))
             torch.save(netG, "{}/generator_epoch_{}.pt".format(output, epoch))
-            torch.save(netD_img, "{}/disc_img_epoch_{}.pt".format(output, epoch))
-            torch.save(netD_z, "{}/disc_z_epoch_{}.pt".format(output, epoch))
-
-            torch.save(netE.state_dict(),"{}/encoder_dict_epoch_{}.pt".format(output,epoch))
-            torch.save(netG.state_dict(), "{}/generator_dict_epoch_{}.pt".format(output, epoch))
+            val_z = netE(val_img_var)
+            val_gen = netG(val_z, val_l, val_gender_var)
+            vutils.save_image(val_gen.data,
+                    "{}/validation_epoch_{}.png".format(output,epoch),
+                    normalize=True)
 
         print("epoch:{}, step:{}".format(epoch+1,i+1))
         print("EG_L1_loss:{} | G_img_loss:{}".format(EG_L1_loss.data[0], G_img_loss.data[0]))
@@ -175,7 +169,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--batch-size', type=int, default=20)
     parser.add_argument('--lr', type=float, default=0.0002)
-    parser.add_argument('--epochs', type=int, default=50)
+    parser.add_argument('--epochs', type=int, default=150)
     parser.add_argument('--beta1', type=float, default=0.5)
     parser.add_argument('--beta2', type=float, default=0.999)
     parser.add_argument('--output', type=str, default='./output')
