@@ -11,12 +11,12 @@ def test(args):
     if not os.path.exists(output):
         os.mkdir(output)
 
-    netG = torch.load(args.pretrained_generator)
-    netE = torch.load(args.pretrained_encoder)
+    netG = torch.load(args.pretrained_generator, map_location='cpu')
+    netE = torch.load(args.pretrained_encoder, map_location='cpu')
 
     val_l = -torch.ones(10 * 10).view(10, 10)
     for i, l in enumerate(val_l):
-        l[1 // 8] = 1
+        l[i // 1] = 1
     val_l = Variable(val_l)
     img = data.ImageFolder(root=args.input,
                                transform=transforms.Compose([
@@ -38,12 +38,12 @@ def test(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--pretrained-generator', type=str, default="models/generator_epoch_2.pt")
-    parser.add_argument('--pretrained-encoder', type=str, default="models/encoder_epoch_2.pt")
+    parser.add_argument('--pretrained-generator', type=str, default="models/generator_epoch_49.pt")
+    parser.add_argument('--pretrained-encoder', type=str, default="models/encoder_epoch_49.pt")
     parser.add_argument('--input', type=str, default="test")
     parser.add_argument('--output', type=str, default='output')
     parser.add_argument('--gender', type=int, default=1)
-    parser.add_argument('--age', type=int, default=25)
+    parser.add_argument('--age', type=int, default=20)
 
     args = parser.parse_args()
 
