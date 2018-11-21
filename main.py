@@ -4,9 +4,14 @@ import pickle
 from labelDataset import *
 import os
 import argparse
-
+import csv
 
 def train(args):
+    loss_file = open('losses.csv', mode='w')
+    columns = ['epoch', 'EG_L1_loss', 'G_tv_loss', 'G_img_loss', 'Ez_loss', 'D_loss', 'Dz_loss', 'D_img', 'D_z', 'D_z_prior','D_reconst']
+    writer = csv.DictWriter(loss_file, fieldnames=columns)
+    writer.writeheader()
+
     output = args.output
     if not os.path.exists(output):
         os.mkdir(output)
@@ -144,6 +149,7 @@ def train(args):
             D_loss.backward()
             optimizerD_img.step()
 
+
             print("epoch:{}, step:{}".format(epoch+1,i+1))
 
 
@@ -155,6 +161,11 @@ def train(args):
             vutils.save_image(val_gen.data,
                     "{}/validation_epoch_{}.png".format(output,epoch),
                     normalize=True)
+        writer.writerow({'epoch': epoch, 'EG_L1_loss': EG_L1_loss.data[0], 'G_tv_loss': G_tv_loss.data[0],
+        'G_img_loss': G_img_loss.data[0], 'Ez_loss': Ez_loss.data[0]
+        ,'D_loss': D_loss.data[0], 'Dz_loss': Dz_loss.data[0], 'D_img': D_img.mean().data[0], 'D_z': Dz.mean().data[0], 
+        'D_z_prior': Dz_prior.mean().data[0], 'D_reconst':D_reconstruction.mean().data[0]})
+
 
         print("epoch:{}, step:{}".format(epoch+1,i+1))
         print("EG_L1_loss:{} | G_img_loss:{}".format(EG_L1_loss.data[0], G_img_loss.data[0]))
@@ -162,7 +173,7 @@ def train(args):
         print("D_img:{} | D_reconst:{} | D_loss:{}".format(D_img.mean().data[0], D_reconstruction.mean().data[0], D_loss.data[0]))
         print("D_z:{} | D_z_prior:{} | Dz_loss:{}".format(Dz.mean().data[0], Dz_prior.mean().data[0], Dz_loss.data[0]))
         print("-"*70)
-
+    loss_file.close()
 
 
 if __name__ == '__main__':
