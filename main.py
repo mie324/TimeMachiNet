@@ -1,10 +1,11 @@
-from models import *
+from model import *
 from utils import *
 import pickle
 from labelDataset import *
 import os
 import argparse
 import csv
+
 
 def train(args):
     loss_file = open('losses.csv', mode='w')
@@ -121,7 +122,7 @@ def train(args):
             Dz = netD_z(z)
             Ez_loss = BCE(Dz,real_label)
 
-            ## EG_loss 4. loss - G
+            # EG_loss 4. loss - G
             reconstruction = netG(z.detach(), age_one_hot, gender_var)
             G_tv_loss = compute_loss(reconstruction)
 
@@ -131,7 +132,7 @@ def train(args):
             optimizerE.step()
             optimizerG.step()
 
-            ## train netD_z with prior distribution U(-1,1)
+            # train netD_z with prior distribution U(-1,1)
             netD_z.zero_grad()
             Dz_prior = netD_z(z_star)
             Dz = netD_z(z.detach())
@@ -140,7 +141,7 @@ def train(args):
             Dz_loss.backward()
             optimizerD_z.step()
 
-            ## train D_img with real images
+            # train D_img with real images
             netD_img.zero_grad()
             D_img,D_clf = netD_img(img,age_one_hot.view(batch_size, n_l, 1, 1), gender_var.view(batch_size,1,1,1))
             D_reconstruction,_ = netD_img(reconst.detach(),age_one_hot.view(batch_size, n_l, 1, 1), gender_var.view(batch_size,1,1,1))
@@ -149,9 +150,7 @@ def train(args):
             D_loss.backward()
             optimizerD_img.step()
 
-
             print("epoch:{}, step:{}".format(epoch+1,i+1))
-
 
         if (epoch%10==0 or epoch == 149):
             torch.save(netE, "{}/encoder_epoch_{}.pt".format(output, epoch))
@@ -159,13 +158,12 @@ def train(args):
             val_z = netE(val_img_var)
             val_gen = netG(val_z, val_l, val_gender_var)
             vutils.save_image(val_gen.data,
-                    "{}/validation_epoch_{}.png".format(output,epoch),
-                    normalize=True)
+                              "{}/validation_epoch_{}.png".format(output,epoch),
+                              normalize=True)
         writer.writerow({'epoch': epoch, 'EG_L1_loss': EG_L1_loss.data[0], 'G_tv_loss': G_tv_loss.data[0],
-        'G_img_loss': G_img_loss.data[0], 'Ez_loss': Ez_loss.data[0]
-        ,'D_loss': D_loss.data[0], 'Dz_loss': Dz_loss.data[0], 'D_img': D_img.mean().data[0], 'D_z': Dz.mean().data[0], 
-        'D_z_prior': Dz_prior.mean().data[0], 'D_reconst':D_reconstruction.mean().data[0]})
-
+                         'G_img_loss': G_img_loss.data[0], 'Ez_loss': Ez_loss.data[0]
+                            ,'D_loss': D_loss.data[0], 'Dz_loss': Dz_loss.data[0], 'D_img': D_img.mean().data[0], 'D_z': Dz.mean().data[0],
+                         'D_z_prior': Dz_prior.mean().data[0], 'D_reconst':D_reconstruction.mean().data[0]})
 
         print("epoch:{}, step:{}".format(epoch+1,i+1))
         print("EG_L1_loss:{} | G_img_loss:{}".format(EG_L1_loss.data[0], G_img_loss.data[0]))
