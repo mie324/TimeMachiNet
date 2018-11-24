@@ -152,7 +152,7 @@ def train(args):
 
             print("epoch:{}, step:{}".format(epoch+1,i+1))
 
-        if (epoch%10==0 or epoch == 149):
+        if (epoch%10==0 or epoch == 149 or G_img_loss <= 5):
             torch.save(netE, "{}/encoder_epoch_{}.pt".format(output, epoch))
             torch.save(netG, "{}/generator_epoch_{}.pt".format(output, epoch))
             val_z = netE(val_img_var)
