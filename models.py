@@ -2,7 +2,6 @@ import torch
 from torch import nn
 
 img_size = 128
-batch_size = 32
 cuda_available = torch.cuda.is_available()
 
 n_channel = 3
