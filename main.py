@@ -177,7 +177,7 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch-size', type=int, default=20)
+    parser.add_argument('--batch-size', type=int, default=32)
     parser.add_argument('--lr', type=float, default=0.0002)
     parser.add_argument('--epochs', type=int, default=180)
     parser.add_argument('--beta1', type=float, default=0.5)

@@ -14,7 +14,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 labeled_dataset = "data/UTKFace/labeled"
 img_size = 128
-batch_size = 20
+batch_size = 32
 
 def converttoage(i):
     if i == 0:
@@ -95,7 +95,6 @@ def one_hot_encode(label_tensor,batch_size,n_l,use_cuda=False):
     one_hot = - torch.ones(batch_size*n_l).view(batch_size,n_l)
     for i,j in enumerate(label_tensor):
         one_hot[i,j] = 1
-    print(one_hot)
     if use_cuda:
         return Variable(one_hot).cuda()
     else:
