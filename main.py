@@ -65,7 +65,8 @@ def train(args):
 
     for epoch in range(args.epochs):
         for i,(img, label) in enumerate(image_loader):
-
+            for j in range(len(label)):
+                label[j] = converttoage(label[j])
             img = Variable(img)
             age = label/2
             gender = label%2*2-1
@@ -176,7 +177,7 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch-size', type=int, default=40)
+    parser.add_argument('--batch-size', type=int, default=20)
     parser.add_argument('--lr', type=float, default=0.0002)
     parser.add_argument('--epochs', type=int, default=180)
     parser.add_argument('--beta1', type=float, default=0.5)
