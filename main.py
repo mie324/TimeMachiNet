@@ -1,4 +1,4 @@
-from model import *
+from models import *
 from utils import *
 import pickle
 from labelDataset import *

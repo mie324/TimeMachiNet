@@ -5,6 +5,7 @@ from torch.autograd import Variable
 import torchvision.transforms as transforms
 import torchvision.datasets as data
 import torchvision.utils as vutils
+from models import Generator, Encoder
 
 def test(args):
     output = args.output
@@ -21,6 +22,7 @@ def test(args):
     img = data.ImageFolder(root=args.input,
                                transform=transforms.Compose([
                                    transforms.Resize(128),
+                                   transforms.CenterCrop(128),
                                    transforms.ToTensor(),
                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
                                ]))
@@ -35,6 +37,7 @@ def test(args):
         vutils.save_image(val_gen.data,
                           "{}/test.png".format(args.output),
                           normalize=True)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
