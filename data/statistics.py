@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-dirList = os.listdir("./data/UTKFace/unlabeled")
+dirList = os.listdir("../data/UTKFace/unlabeled")
 num_males = 0
 num_females = 0
 ages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]

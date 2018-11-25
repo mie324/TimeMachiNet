@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-losses = "./losses.csv"
+losses = "../losses.csv"
 
 loss = pd.read_csv(losses)
 plt.figure()
