@@ -5,7 +5,6 @@ from torch.autograd import Variable
 import torchvision.transforms as transforms
 import torchvision.datasets as data
 import torchvision.utils as vutils
-from neural_network.models import Generator, Encoder
 
 
 def test(args):
