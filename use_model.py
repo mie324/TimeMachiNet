@@ -14,6 +14,10 @@ output_orig = "./static/test/output/input_img.png"
 
 
 def evaluate():
+    current_dir = os.getcwd()
+    output = os.path.join(current_dir, r'static/test/output')
+    if not os.path.exists(output):
+        os.mkdir(output)
     netG = torch.load(pretrained_generator, map_location="cpu")
     netE = torch.load(pretrained_encoder, map_location="cpu")
 
@@ -42,7 +46,8 @@ def evaluate():
         val_gen = netG(val_z, val_l, val_gender_var)
         vutils.save_image(val_gen.data,
                           output_model,
-                          normalize=True)
+                          normalize=True,
+                          nrow=10)
 
         
 def test(args):
@@ -83,7 +88,7 @@ if __name__ == '__main__':
     parser.add_argument('--pretrained-encoder', type=str, default="models/encoder_epoch_49.pt")
     parser.add_argument('--input', type=str, default="test")
     parser.add_argument('--output', type=str, default='output')
-    parser.add_argument('--gender', type=int, default=1)
+    parser.add_argument('--gender', type=int, default=0)
     parser.add_argument('--age', type=int, default=20)
 
     args = parser.parse_args()
