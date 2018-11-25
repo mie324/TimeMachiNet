@@ -5,7 +5,8 @@ from torch.autograd import Variable
 import torchvision.transforms as transforms
 import torchvision.datasets as data
 import torchvision.utils as vutils
-from models import Generator, Encoder
+from neural_network.models import Generator, Encoder
+
 
 def test(args):
     output = args.output
@@ -20,17 +21,17 @@ def test(args):
         l[i // 1] = 1
     val_l = Variable(val_l)
     img = data.ImageFolder(root=args.input,
-                               transform=transforms.Compose([
-                                   transforms.Resize(128),
-                                   transforms.CenterCrop(128),
-                                   transforms.ToTensor(),
-                                   transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-                               ]))
+                           transform=transforms.Compose([
+                               transforms.Resize(128),
+                               transforms.CenterCrop(128),
+                               transforms.ToTensor(),
+                               transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+                           ]))
     dataloader = torch.utils.data.DataLoader(img,
-                                            batch_size=1,
-                                            shuffle=True)
+                                             batch_size=1,
+                                             shuffle=True)
     for i, (img, label) in enumerate(dataloader):
-        val_z = netE(Variable(img.repeat(10,1,1,1)))
+        val_z = netE(Variable(img.repeat(10, 1, 1, 1)))
         gender_var = Variable(torch.Tensor(args.gender))
         val_gender_var = Variable(gender_var[:1].view(-1, 1).repeat(10, 1))
         val_gen = netG(val_z, val_l, val_gender_var)
@@ -51,3 +52,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     test(args)
+9
