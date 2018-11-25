@@ -6,6 +6,12 @@ import torchvision.transforms as transforms
 import torchvision.datasets as data
 import torchvision.utils as vutils
 
+pretrained_generator = "models/generator_epoch_49.pt"
+pretrained_encoder = "models/encoder_epoch_49.pt"
+
+def run_model():
+
+
 
 def test(args):
     output = args.output
