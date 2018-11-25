@@ -12,7 +12,7 @@ def train(args):
     if not os.path.exists(output):
         os.mkdir(output)
 
-    loss_file = open('output/losses.csv', mode='w')
+    loss_file = open('./output/losses.csv', mode='w')
     columns = ['epoch', 'EG_L1_loss', 'G_tv_loss', 'G_img_loss', 'Ez_loss', 'D_loss', 'Dz_loss', 'D_img', 'D_z',
                'D_z_prior', 'D_reconst']
     writer = csv.DictWriter(loss_file, fieldnames=columns)
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=150)
     parser.add_argument('--beta1', type=float, default=0.5)
     parser.add_argument('--beta2', type=float, default=0.999)
-    parser.add_argument('--output', type=str, default='output')
+    parser.add_argument('--output', type=str, default='./output')
 
     args = parser.parse_args()
 
