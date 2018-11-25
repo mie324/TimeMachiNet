@@ -11,8 +11,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/TimeMachiNet$app.coverage" NAME="app Coverage Results" MODIFIED="1543117194912" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/TimeMachiNet$train.coverage" NAME="train Coverage Results" MODIFIED="1543116150191" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/TimeMachiNet$app.coverage" NAME="app Coverage Results" MODIFIED="1543118687051" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/TimeMachiNet$train.coverage" NAME="train Coverage Results" MODIFIED="1543118987185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TimeMachiNet$main.coverage" NAME="main Coverage Results" MODIFIED="1543114986561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
@@ -29,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/neural_network/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="187" column="57" selection-start-line="187" selection-start-column="57" selection-end-line="187" selection-end-column="57" />
+            <state relative-caret-position="4136">
+              <caret line="188" column="61" selection-start-line="188" selection-start-column="61" selection-end-line="188" selection-end-column="61" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -84,7 +84,7 @@
         <entry file="file://$PROJECT_DIR$/templates/main_navbar.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="66">
-              <caret line="3" column="40" lean-forward="true" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
+              <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -93,7 +93,7 @@
         <entry file="file://$PROJECT_DIR$/static/custom.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="3428">
-              <caret line="237" lean-forward="true" selection-start-line="237" selection-end-line="237" />
+              <caret line="237" selection-start-line="237" selection-end-line="237" />
             </state>
           </provider>
         </entry>
@@ -102,7 +102,7 @@
         <entry file="file://$PROJECT_DIR$/static/nav_bar.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="198">
-              <caret line="9" column="16" lean-forward="true" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+              <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
               <folding>
                 <element signature="e#8933#9176#2" expanded="true" />
                 <element signature="e#10188#10437#2" expanded="true" />
@@ -188,16 +188,6 @@
               <item name="TimeMachiNet" type="b2602c69:ProjectViewProjectNode" />
               <item name="TimeMachiNet" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="TimeMachiNet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TimeMachiNet" type="462c0819:PsiDirectoryNode" />
-              <item name="neural_network" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TimeMachiNet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TimeMachiNet" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -232,7 +222,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.train">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TimeMachiNet" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -301,8 +291,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.app" />
         <item itemvalue="Python.train" />
+        <item itemvalue="Python.app" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -317,12 +307,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1541964734845</updated>
-      <workItem from="1543008837454" duration="12177000" />
+      <workItem from="1543008837454" duration="12833000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12177000" />
+    <option name="totallyTimeSpent" value="12833000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -342,7 +332,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.43666667" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.43666667" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -350,7 +340,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Python Console" order="11" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -493,7 +483,7 @@
     <entry file="file://$PROJECT_DIR$/static/nav_bar.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="9" column="16" lean-forward="true" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
           <folding>
             <element signature="e#8933#9176#2" expanded="true" />
             <element signature="e#10188#10437#2" expanded="true" />
@@ -504,7 +494,7 @@
     <entry file="file://$PROJECT_DIR$/static/custom.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3428">
-          <caret line="237" lean-forward="true" selection-start-line="237" selection-end-line="237" />
+          <caret line="237" selection-start-line="237" selection-end-line="237" />
         </state>
       </provider>
     </entry>
@@ -525,14 +515,14 @@
     <entry file="file://$PROJECT_DIR$/templates/main_navbar.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
-          <caret line="3" column="40" lean-forward="true" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
+          <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/neural_network/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="187" column="57" selection-start-line="187" selection-start-column="57" selection-end-line="187" selection-end-column="57" />
+        <state relative-caret-position="4136">
+          <caret line="188" column="61" selection-start-line="188" selection-start-column="61" selection-end-line="188" selection-end-column="61" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
