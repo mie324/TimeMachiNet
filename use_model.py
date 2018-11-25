@@ -6,15 +6,16 @@ import torchvision.transforms as transforms
 import torchvision.datasets as data
 import torchvision.utils as vutils
 
-pretrained_encoder = "./models/encoder_epoch_49"
-pretrained_generator = "./models/generator_epoch_49"
-input = "./test/input"
-output_model = "./test/output/output.png"
-output_orig = "./test/output/input_img.png"
+pretrained_encoder = "./models/encoder_epoch_40.pt"
+pretrained_generator = "./models/generator_epoch_40.pt"
+input = "./static/test/input"
+output_model = "./static/test/output/output.png"
+output_orig = "./static/test/output/input_img.png"
+
 
 def evaluate():
-    netG = torch.load(pretrained_encoder, map_location="cpu")
-    netE = torch.load(pretrained_generator, map_location="cpu")
+    netG = torch.load(pretrained_generator, map_location="cpu")
+    netE = torch.load(pretrained_encoder, map_location="cpu")
 
     val_l = -torch.ones(10 * 10).view(10, 10)
     for i, l in enumerate(val_l):
@@ -32,11 +33,11 @@ def evaluate():
                                              shuffle=True)
     for i, (img, label) in enumerate(dataloader):
         input_img = Variable(img)
-        vutils.save_image(val_gen.data,
+        vutils.save_image(input_img.data,
                           output_orig,
                           normalize=True)
         val_z = netE(Variable(img.repeat(10, 1, 1, 1)))
-        gender_var = Variable(torch.Tensor(args.gender))
+        gender_var = Variable(torch.Tensor(1))
         val_gender_var = Variable(gender_var[:1].view(-1, 1).repeat(10, 1))
         val_gen = netG(val_z, val_l, val_gender_var)
         vutils.save_image(val_gen.data,

@@ -1,15 +1,24 @@
 {% extends 'base.html' %}
 
 {% block title %} Home {% endblock title %}
+
 {% block body %}
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <h1 class="display-4">Upload!</h1>
-        <form action="http://localhost:5000/uploader" method="POST"
-              enctype="multipart/form-data">
-            <input type="file" name="file"/>
-            <input type="submit"/>
-        </form>
-    </div>
+<div class="container">
+
+    <h1 class="display-4">Check out your results!</h1>
+</div>
+<div class="container">
+    <h2>Input image:</h2>
+    <img src="{{ url_for('static', filename='test/output/input_img.png') }}" style="width:128px;height:128px"
+         class="rounded float-left">
+</div>
+
+<div class="container">
+    <h2>Output image</h2>
+    <img src="{{ url_for('static', filename='test/output/output.png') }}" class="rounded float-left">
+</div>
+
+<div class="container">
+    <p></p>
 </div>
 {% endblock body %}
