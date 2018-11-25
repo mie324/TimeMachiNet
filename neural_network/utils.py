@@ -6,13 +6,60 @@ import torchvision.utils as vutils
 from torch import nn
 from torch import optim
 from torch.autograd import Variable
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 labeled_dataset = "data/UTKFace/labeled"
 img_size = 128
-batch_size = 20
+batch_size = 32
+
+def converttoage(i):
+    if i == 0:
+        return 0
+    elif i == 1:
+        return 1
+    elif i == 2:
+        return 10
+    elif i == 3:
+        return 11
+    elif i == 4:
+        return 12
+    elif i == 5:
+        return 13
+    elif i == 6:
+        return 14
+    elif i == 7:
+        return 15
+    elif i == 8:
+        return 16
+    elif i == 9:
+        return 17
+    elif i == 10:
+        return 18
+    elif i == 11:
+        return 19
+    elif i == 12:
+        return 2
+    elif i == 13:
+        return 3
+    elif i == 14:
+        return 4
+    elif i == 15:
+        return 5
+    elif i == 16:
+        return 6
+    elif i == 17:
+        return 7
+    elif i == 18:
+        return 8
+    elif i == 19:
+        return 9
+    else:
+        return -1
+
 
 def get_data_loader():
     dataset = data.ImageFolder(root=labeled_dataset,
@@ -21,10 +68,20 @@ def get_data_loader():
                                    transforms.ToTensor(),
                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
                                ]))
+
     dataloader = torch.utils.data.DataLoader(dataset,
                                              batch_size= batch_size,
                                              shuffle=True)
+
     return dataloader
+
+
+# function to show an image
+def imshow(img):
+    img = img / 2 + 0.5     # unnormalize
+    npimg = img.numpy()
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    plt.show()
 
 def init_weights(m):
     classname = m.__class__.__name__

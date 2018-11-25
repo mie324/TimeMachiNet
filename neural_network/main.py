@@ -1,4 +1,8 @@
+<<<<<<< HEAD:neural_network/main.py
 from neural_network.model import *
+=======
+from models import *
+>>>>>>> 63ca6a7b263c00742e46c38038128f07afe083ac:main.py
 from utils import *
 import pickle
 from neural_network.labelDataset import *
@@ -65,7 +69,8 @@ def train(args):
 
     for epoch in range(args.epochs):
         for i,(img, label) in enumerate(image_loader):
-
+            for j in range(len(label)):
+                label[j] = converttoage(label[j])
             img = Variable(img)
             age = label/2
             gender = label%2*2-1
@@ -152,7 +157,7 @@ def train(args):
 
             print("epoch:{}, step:{}".format(epoch+1,i+1))
 
-        if (epoch%10==0 or epoch == 149):
+        if (epoch%10==0 or epoch == 149 or G_img_loss <= 5):
             torch.save(netE, "{}/encoder_epoch_{}.pt".format(output, epoch))
             torch.save(netG, "{}/generator_epoch_{}.pt".format(output, epoch))
             val_z = netE(val_img_var)
@@ -176,9 +181,9 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch-size', type=int, default=20)
+    parser.add_argument('--batch-size', type=int, default=32)
     parser.add_argument('--lr', type=float, default=0.0002)
-    parser.add_argument('--epochs', type=int, default=150)
+    parser.add_argument('--epochs', type=int, default=180)
     parser.add_argument('--beta1', type=float, default=0.5)
     parser.add_argument('--beta2', type=float, default=0.999)
     parser.add_argument('--output', type=str, default='./output')
