@@ -1,7 +1,7 @@
-from model import *
+from neural_network.model import *
 from utils import *
 import pickle
-from labelDataset import *
+from neural_network.labelDataset import *
 import os
 import argparse
 import csv

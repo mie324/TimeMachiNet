@@ -2,9 +2,8 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
+
 # Route for home or index
-
-
 @app.route('/')
 def index():
     return render_template('home.html')
