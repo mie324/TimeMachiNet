@@ -1,8 +1,8 @@
 import os
 from shutil import copyfile
 
-dataset = "../data/UTKFace/unlabeled"
-labeled_destination = "../data/UTKFace/labeled"
+dataset = "data/UTKFace/unlabeled"
+labeled_destination = "data/UTKFace/labeled"
 
 
 def create_destination():

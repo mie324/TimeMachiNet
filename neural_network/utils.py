@@ -11,7 +11,7 @@ import numpy as np
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-labeled_dataset = "../data/UTKFace/labeled"
+labeled_dataset = "data/UTKFace/labeled"
 img_size = 128
 batch_size = 32
 
