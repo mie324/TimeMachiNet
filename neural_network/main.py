@@ -185,7 +185,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=150)
     parser.add_argument('--beta1', type=float, default=0.5)
     parser.add_argument('--beta2', type=float, default=0.999)
-    parser.add_argument('--output', type=str, default='./output')
+    parser.add_argument('--output', type=str, default='/output')
 
     args = parser.parse_args()
 
