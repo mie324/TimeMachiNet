@@ -88,7 +88,7 @@ if __name__ == '__main__':
     parser.add_argument('--pretrained-encoder', type=str, default="models/encoder_epoch_49.pt")
     parser.add_argument('--input', type=str, default="test")
     parser.add_argument('--output', type=str, default='output')
-    parser.add_argument('--gender', type=int, default=0)
+    parser.add_argument('--gender', type=int, default=1)
     parser.add_argument('--age', type=int, default=20)
 
     args = parser.parse_args()
