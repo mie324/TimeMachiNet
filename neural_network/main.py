@@ -80,9 +80,7 @@ def train(args):
                 val_gender = gender[:8].view(-1, 1).repeat(10, 1)
                 val_img_var = Variable(val_img)
                 val_gender_var = Variable(val_gender)
-
-                pickle.dump(val_img, open("fixed_noise.p", "wb"))
-
+                
                 if cuda_available:
                     val_img_var = val_img_var.cuda()
                     val_gender_var = val_gender_var.cuda()
