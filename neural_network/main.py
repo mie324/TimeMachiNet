@@ -1,7 +1,6 @@
 from neural_network.models import *
 from neural_network.utils import *
-import pickle
-from neural_network.labelDataset import *
+from neural_network.label_dataset import *
 import os
 import argparse
 import csv
@@ -109,7 +108,7 @@ def train(args):
             # EG_loss 1. L1 reconstruction loss
             z = netE(img)
             reconst = netG(z, age_one_hot, gender_var)
-            EG_L1_loss = L1(reconst, img)
+            EG_L1_loss = L1(reconst, img)  # mean abs error (makes more realistic)
 
             # EG_loss 2. GAN loss - image
             z = netE(img)
@@ -148,6 +147,7 @@ def train(args):
             D_reconstruction, _ = netD_img(reconst.detach(), age_one_hot.view(batch_size, n_l, 1, 1),
                                            gender_var.view(batch_size, 1, 1, 1))
 
+            # want both to be maximize
             D_loss = BCE(D_img, real_label) + BCE(D_reconstruction, fake_label)
             D_loss.backward()
             optimizerD_img.step()
