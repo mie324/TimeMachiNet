@@ -8,8 +8,8 @@ n_channel = 3
 n_disc = 16
 n_gen = 64
 n_encode = 64
-n_l = 10
-n_z = 50
+n_l = 10  # age vector
+n_z = 50  # latent vector size
 num_age = int(n_z / n_l)
 num_gender = int(n_z / 2)
 

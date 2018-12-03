@@ -84,6 +84,7 @@ def imshow(img):
     plt.show()
 
 
+# check torch documentation
 def init_weights(m):
     classname = m.__class__.__name__
     if classname.find('Conv') != -1 or classname.find("Linear") != -1:
@@ -103,6 +104,7 @@ def one_hot_encode(label_tensor, batch_size, n_l, use_cuda=False):
         return Variable(one_hot)
 
 
+# used to compute total variance loss (Denoise)
 def compute_loss(img_tensor, img_size=128):
     x = (img_tensor[:, :, 1:, :] - img_tensor[:, :, :img_size - 1, :]) ** 2
     y = (img_tensor[:, :, :, 1:] - img_tensor[:, :, :, :img_size - 1]) ** 2
